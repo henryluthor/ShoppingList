@@ -2,7 +2,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class ShoppingList {
-  public static void main2(String[] args){
+
+  public static void ShoppingListV1(){
     String response = "Y";
     HashSet<String> shoppingList = new HashSet<String>();
     Scanner myScanner = new Scanner(System.in);
@@ -26,7 +27,8 @@ public class ShoppingList {
     
   }
 
-  public static void main(String[] args){
+
+  public static void ShoppingListV2(){
     int response;
     HashSet<String> shoppingList = new HashSet<String>();
     Scanner myScanner = new Scanner(System.in);
@@ -38,22 +40,35 @@ public class ShoppingList {
       System.out.println("2 - Remove item from shopping list");
       System.out.println("3 - Show shopping list");
       System.out.println("4 - Exit");
+
       response = myScanner.nextInt();
+      myScanner.nextLine(); // necessary buffer cleanup
 
       switch (response) {
         case 1:
-          // Add to list
+          // Add to list          
           System.out.println("Write item to the shopping list: ");
           item = myScanner.nextLine();
-          shoppingList.add(item);
-          System.out.println(item + " added to the list.");
+          // .add() returns false if item already exist
+          // using toLowerCase to avoid duplicates, because although HashSet already does not allow duplicates it is also case sensitive
+          // so "Bread" and "bread" would be considered different
+          if(shoppingList.add(item.toLowerCase())){
+            System.out.println(item + " added.");
+          }
+          else{
+            System.out.println(item + " is already in the list.");
+          }
           break;
         case 2:
           // Remove from list
           System.out.println("Write item you want to remove from the shopping list: ");
           item = myScanner.nextLine();
-          shoppingList.remove(item);
-          System.out.println("Done. If " + item + " was in the list it has been removed.");
+          if(shoppingList.remove(item)){
+            System.out.println(item + " removed.");
+          }
+          else{
+            System.out.println(item + " was not found.");
+          }
           break;      
         case 3:
           // Show shopping list
@@ -61,15 +76,25 @@ public class ShoppingList {
           for (String i : shoppingList) {
             System.out.println(i);            
           }
+          // System.out.println("Shopping list: " + shoppingList);
           break;
         case 4:
-          myScanner.close();
-          return;
+          System.out.println("Goodbye!");
+          break;
         default:
-          myScanner.close();
+          System.out.println("Invalid option");
           break;
       }
+      System.out.println("");
     }
     while(response != 4);
+
+    myScanner.close();
+  }
+
+
+  public static void main(String[] args){
+    // ShoppingListV1();
+    ShoppingListV2();
   }
 }
